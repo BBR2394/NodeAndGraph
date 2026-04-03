@@ -8,8 +8,10 @@ Baptiste BR 3 Avril 2026
 int main(int ac, char **av) {
     MyClass monobjet;
     std::cout << "bonjour" << std::endl;
-    monobjet.print();
+    monobjet.print("");
     monobjet.setId(42);
-    monobjet.print();
+    monobjet.print("");
+
+    monobjet.prompt();
     return 0;
 }
