@@ -10,6 +10,7 @@ int main(int ac, char **av) {
     std::cout << "bonjour" << std::endl;
     monobjet.print("");
     monobjet.setId(42);
+    
     monobjet.print("");
 
     monobjet.prompt();
