@@ -124,12 +124,35 @@ def readFile(nameFile):
 def dynamicGen():
     master_node = MyNode(hello='debut de /', max_child=-1, nodeData='/')
     tst = master_node
+    fisrtInit = False
+
+    cmdList = ['init', 'doc', 'add', 'display', 'display_child', 'info', 'moovein', 'reset_cursor', 'goto_parent', 'picture', 'quit']
+    cmdDict = {'init' : '\t\tInitialise les enfants du nœud courant (WIP)',
+               'doc' : '\t\tAffiche la documentation des commandes', 
+               'add' : '\t\tAjoute un enfant au nœud courant', 
+               'display' : '\tAffiche le graphe', 
+               'display_child' : 'Affiche le(s) enfant(s) du nœud courant', 
+               'info' : '\t\tAffiche les informations du nœud courant', 
+               'moovein' : '\tSe déplace dans un enfant du nœud courant', 
+               'reset_cursor' : '\tRetourne au nœud maître', 
+               'goto_parent' : '\tSe déplace vers le parent du nœud courant', 
+               'picture' : '\tGénère une image du graphe (via Digraph)', 
+               'quit' : '\t\tQuitte le programme'
+               }
+    
     while True:
         entry = input("Que voulez-faire?\n--$>")
 
         if entry == 'quit':
             print("Au revoir")
             return True
+        elif entry == 'doc':
+            for cmd in cmdList:
+                print(f"{cmd} : {cmdDict[cmd]}")
+        elif entry == 'init':
+            tst.createAllChild(lvl=0)
+            fisrtInit = True
+            print("Initialisation des enfants terminée")
         elif entry == 'add':
             entry_bis = input("Que voulez-ajouter?\n--$>")
             tst.addOneChild(dataStr=entry_bis, dataVal=42)
