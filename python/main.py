@@ -3,6 +3,7 @@
 import sys
 import uuid 
 from graphviz import Digraph
+import readDataCSV
 
 nb_node=0
 extract=[]
@@ -149,10 +150,12 @@ def dynamicGen():
         elif entry == 'doc':
             for cmd in cmdList:
                 print(f"{cmd} : {cmdDict[cmd]}")
-        elif entry == 'init':
+        elif entry == 'init' and not fisrtInit:
             tst.createAllChild(lvl=0)
             fisrtInit = True
             print("Initialisation des enfants terminée")
+        elif entry == 'init' and fisrtInit:
+            print("Les enfants ont déjà été initialisés")
         elif entry == 'add':
             entry_bis = input("Que voulez-ajouter?\n--$>")
             tst.addOneChild(dataStr=entry_bis, dataVal=42)
@@ -199,6 +202,13 @@ def main(av):
             dynamicGen()
             return 0
         #readFile(av)
+        if av[1] == "read":
+            fileLst = readDataCSV.readCSV(av[2])
+            fileLst = readDataCSV.orderByLevel(fileLst)
+            onlyFirstLevel = readDataCSV.getOnlyLevelOne(fileLst)
+            for line in onlyFirstLevel:
+                print(line)
+            return 0
     else:
         print("on ne fait rien")
 
