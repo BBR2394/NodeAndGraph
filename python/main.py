@@ -43,7 +43,20 @@ class MyNode:
         self.list_child.append(MyNode(max_child=self.maxChild, val=dataVal, hello='enfant ', parent=self, nodeData=dataStr))
         self.has_created_child = True
 
+    def initFromDataOnlyLevelOne(self, dataList=[]):
+        # uid;pseudo;data;level;parent
+        for line in dataList:
+            print("Processing data : ", line)
+            data = line.split(';')
+            self.list_child.append(MyNode(max_child=self.maxChild, 
+                                          val=42, hello='enfant ', 
+                                          parent=self, 
+                                          nodeData=data[2], 
+                                          uuidForced=data[0], 
+                                          pseudo=data[1]))
+        self.has_created_child = True
 
+    
     def displayAllChild(self, lvl=0):
         if self.has_created_child == False:
             return False
@@ -77,14 +90,17 @@ class MyNode:
         return True
     
 
-    def __init__(self, max_child=3, val=42, hello="le noeud", parent=None, nodeData=""):
-        self.id = uuid.uuid4()
+    def __init__(self, max_child=3, val=42, hello="le noeud", parent=None, nodeData="", uuidForced=None, pseudo=""):
+        if uuidForced is not None:
+            self.id = uuidForced
+        else:
+            self.id = uuid.uuid4()
         self.data = []
         self.maxChild = max_child
         self.val = val
         self.node_data = nodeData
-        self.name = 'le nom du node'
-        self.parent=parent
+        self.name = pseudo if pseudo else 'le nom du node'
+        self.parent = parent
         self.has_created_child=False
         self.list_child = []
         #parent=None
@@ -122,7 +138,8 @@ def readFile(nameFile):
     for i in input:
         print(i)
 
-def dynamicGen():
+# dataToInject : (UNIQUEMENT les niveaux 1) liste des données à injecter dans l'arbre 
+def dynamicGen(dataToInject=[]):
     master_node = MyNode(hello='debut de /', max_child=-1, nodeData='/')
     tst = master_node
     fisrtInit = False
@@ -140,6 +157,9 @@ def dynamicGen():
                'picture' : '\tGénère une image du graphe (via Digraph)', 
                'quit' : '\t\tQuitte le programme'
                }
+
+    if dataToInject:
+        master_node.initFromDataOnlyLevelOne(dataToInject)
     
     while True:
         entry = input("Que voulez-faire?\n--$>")
@@ -208,6 +228,14 @@ def main(av):
             onlyFirstLevel = readDataCSV.getOnlyLevelOne(fileLst)
             for line in onlyFirstLevel:
                 print(line)
+            return 0
+        if av[1] == "readndyn":
+            fileLst = readDataCSV.readCSV(av[2])
+            fileLst = readDataCSV.orderByLevel(fileLst)
+            onlyFirstLevel = readDataCSV.getOnlyLevelOne(fileLst)
+            for line in onlyFirstLevel:
+                print(line)
+            dynamicGen(dataToInject=onlyFirstLevel)
             return 0
     else:
         print("on ne fait rien")
